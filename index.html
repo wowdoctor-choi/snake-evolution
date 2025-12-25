@@ -848,15 +848,18 @@
         }
     }
 
-    
-    // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    // -----------------------------------------------------------
+// ✅ [닥터의 파이어베이스 연결 코드 - 수정 완료]
+// -----------------------------------------------------------
+
+// 1. 브라우저가 알아듣는 인터넷 주소(CDN)로 가져오기
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+// 2. 닥터의 진짜 설정 (API Key)
 const firebaseConfig = {
   apiKey: "AIzaSyCO0-40KHBXb3KqVfWkJMihskT13ek8trc",
   authDomain: "server-af593.firebaseapp.com",
@@ -867,10 +870,33 @@ const firebaseConfig = {
   measurementId: "G-Y7KJ62DER2"
 };
 
-// Initialize Firebase
+// 3. 파이어베이스 시동 걸기
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
+console.log("🔥 파이어베이스 시동 켜짐!");
+
+// 4. 게임과 연결하기 (중요!)
+// 닥터의 게임 코드는 'state'라는 바구니에 담긴 도구를 쓴다고 가정합니다.
+// 만약 state 변수가 없다면 만들어줍니다.
+window.state = window.state || {}; 
+
+state.app = app;
+state.auth = auth;
+state.db = db;
+
+// 5. 자동 로그인 (문 열어두기)
+signInAnonymously(auth)
+  .then(() => {
+    console.log("✅ 로그인 성공! (익명)");
+  })
+  .catch((error) => {
+    console.error("❌ 로그인 실패:", error);
+  });
+
+// -----------------------------------------------------------
     // --- Shop Functions ---
     function updateShop() {
         const list = document.getElementById('skin-list');
