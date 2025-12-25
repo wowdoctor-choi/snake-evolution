@@ -848,49 +848,27 @@
         }
     }
 
-    // --- Firebase Logic ---
-    async function initFirebase() {
-        const firebaseConfig = JSON.parse(__firebase_config);
-        state.app = initializeApp(firebaseConfig);
-        state.auth = getAuth(state.app);
-        state.db = getFirestore(state.app);
+    // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-        const initAuth = async () => {
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                await signInWithCustomToken(state.auth, __initial_auth_token);
-            } else {
-                await signInAnonymously(state.auth);
-            }
-        };
-        await initAuth();
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCO0-40KHBXb3KqVfWkJMihskT13ek8trc",
+  authDomain: "server-af593.firebaseapp.com",
+  projectId: "server-af593",
+  storageBucket: "server-af593.firebasestorage.app",
+  messagingSenderId: "489998833970",
+  appId: "1:489998833970:web:abc9e410ed727ad3dddf2b",
+  measurementId: "G-Y7KJ62DER2"
+};
 
-        onAuthStateChanged(state.auth, async (user) => {
-            state.user = user;
-            if (user) {
-                document.getElementById('user-id-display').innerText = `UID: ${user.uid}`;
-                document.getElementById('btn-start-multi').disabled = false;
-                document.getElementById('btn-start-multi').classList.remove('opacity-50', 'cursor-not-allowed');
-                const userDoc = await getDoc(doc(state.db, 'artifacts', appId, 'users', user.uid, 'profile', 'data'));
-                if (userDoc.exists()) {
-                    state.userData = { ...state.userData, ...userDoc.data() };
-                    document.getElementById('nickname-input').value = state.userData.nickname;
-                }
-                updateUI();
-                listenCommunity();
-                listenGameChat();
-            }
-        });
-    }
-
-    async function syncUserData() {
-        if (!state.user) return;
-        await setDoc(doc(state.db, 'artifacts', appId, 'users', state.user.uid, 'profile', 'data'), state.userData, { merge: true });
-    }
-
-    function updateUI() {
-        document.getElementById('lobby-coin').innerText = state.userData.coins;
-        document.getElementById('shop-coin').innerText = state.userData.coins;
-    }
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
     // --- Shop Functions ---
     function updateShop() {
