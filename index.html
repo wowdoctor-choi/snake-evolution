@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SNAKE EVOLUTION: REALISTIC & RESPAWN</title>
+    <title>SNAKE EVOLUTION: FULLY FIXED</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Pretendard:wght@400;700;900&family=Nanum+Pen+Script&display=swap');
@@ -72,7 +72,6 @@
             pointer-events: auto;
             opacity: 0.6;
         }
-        #battle-chat:hover { opacity: 1; }
 
         #chat-messages {
             flex-grow: 1;
@@ -173,15 +172,13 @@
             touch-action: manipulation;
         }
 
-        .skin-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .skin-card:hover { transform: scale(1.05); }
-
         .chalkboard {
             background-color: #1e3a29;
             box-shadow: inset 0 0 20px #000;
         }
+
+        .skin-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .skin-card:hover { transform: translateY(-5px); }
 
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -194,10 +191,10 @@
     <!-- Lobby Screen -->
     <div id="screen-lobby" class="screen active justify-center">
         <h1 class="font-title text-4xl md:text-6xl text-blue-400 mb-2 italic text-center uppercase tracking-tighter drop-shadow-glow">Snake Evolution</h1>
-        <p class="text-slate-400 mb-8 text-center text-sm font-medium italic">리얼한 디자인과 무한 경쟁의 시작!</p>
+        <p class="text-slate-400 mb-8 text-center text-sm font-medium">사실적인 디자인과 부활 시스템의 결합!</p>
         
         <div class="mb-6 w-full max-w-sm">
-            <label class="block text-xs font-bold text-slate-500 mb-2 px-2 uppercase tracking-widest text-center">전설의 지렁이 이름</label>
+            <label class="block text-xs font-bold text-slate-500 mb-2 px-2 uppercase tracking-widest text-center">지렁이 닉네임</label>
             <input type="text" id="nickname-input" maxlength="10" placeholder="이름을 입력하세요..." 
                 class="w-full bg-slate-800 border-2 border-slate-700 rounded-2xl px-6 py-4 text-lg font-bold focus:border-blue-500 outline-none transition-all shadow-inner text-center">
             <div id="user-id-display" class="text-[10px] text-slate-600 mt-2 px-2 truncate font-mono text-center italic">서버 확인 중...</div>
@@ -206,11 +203,11 @@
         <div class="grid grid-cols-2 gap-4 w-full max-w-md mb-6 px-4">
             <button id="btn-start-single" class="bg-gradient-to-br from-emerald-600 to-teal-700 p-6 rounded-3xl flex flex-col items-center gap-2 hover:scale-105 transition-all shadow-xl">
                 <span class="text-3xl">🤖</span>
-                <span class="font-bold">싱글 플레이</span>
+                <span class="font-bold">싱글 모드</span>
             </button>
             <button id="btn-start-multi" class="bg-gradient-to-br from-blue-600 to-indigo-700 p-6 rounded-3xl flex flex-col items-center gap-2 hover:scale-105 transition-all shadow-xl opacity-50" disabled>
                 <span class="text-3xl">🌐</span>
-                <span class="font-bold">멀티 플레이</span>
+                <span class="font-bold">온라인 모드</span>
             </button>
         </div>
 
@@ -220,7 +217,7 @@
             <button onclick="window.switchScreen('minigame-hub')" class="bg-purple-600 px-6 py-3 rounded-2xl font-bold transition-all animate-pulse flex items-center gap-2">🍭 미니게임</button>
         </div>
         
-        <div class="bg-slate-800/80 px-8 py-4 rounded-3xl border border-slate-700 text-yellow-400 font-black shadow-lg text-xl">
+        <div class="bg-slate-800/80 px-8 py-3 rounded-2xl border border-slate-700 text-yellow-400 font-black shadow-lg">
             🪙 <span id="lobby-coin">0</span>
         </div>
     </div>
@@ -229,8 +226,8 @@
     <div id="screen-shop" class="screen">
         <div class="w-full max-w-5xl flex justify-between items-center mb-8 pt-6 px-4">
             <button onclick="window.switchScreen('lobby')" class="bg-slate-800 hover:bg-slate-700 p-3 rounded-xl font-bold transition-all">← 뒤로가기</button>
-            <h2 class="font-title text-4xl text-blue-400 uppercase italic tracking-widest">Worm Skin Shop</h2>
-            <div class="text-yellow-400 font-black bg-slate-800 px-6 py-3 rounded-2xl border border-slate-700 shadow-xl text-lg">🪙 <span id="shop-coin">0</span></div>
+            <h2 class="font-title text-3xl text-blue-400 uppercase italic tracking-widest text-center flex-grow">Collection</h2>
+            <div class="text-yellow-400 font-black bg-slate-800 px-5 py-3 rounded-2xl border border-slate-700 shadow-xl">🪙 <span id="shop-coin">0</span></div>
         </div>
         <div id="skin-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 w-full max-w-6xl pb-20 px-4"></div>
     </div>
@@ -239,17 +236,17 @@
     <div id="screen-community" class="screen">
         <div class="w-full max-w-2xl flex justify-between items-center mb-6 pt-4">
             <button onclick="window.switchScreen('lobby')" class="text-slate-400 font-bold">← 로비</button>
-            <h2 class="font-title text-3xl text-indigo-400 uppercase italic">Board</h2>
+            <h2 class="font-title text-3xl text-indigo-400">Board</h2>
             <div class="w-10"></div>
         </div>
         <div class="w-full max-w-2xl bg-slate-800 p-4 rounded-2xl border border-slate-700 mb-6">
             <div id="comm-area-connected" class="hidden">
                  <div class="flex gap-2">
-                    <input type="text" id="comm-input" placeholder="함께 이야기를 나눠요..." class="flex-grow bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-sm outline-none focus:border-indigo-500 transition-all">
-                    <button id="btn-comm-post" class="bg-indigo-600 px-6 py-2 rounded-xl font-bold text-sm shadow-md">등록</button>
+                    <input type="text" id="comm-input" placeholder="함께 소통해요..." class="flex-grow bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-sm outline-none">
+                    <button id="btn-comm-post" class="bg-indigo-600 px-6 py-2 rounded-xl font-bold text-sm">등록</button>
                 </div>
             </div>
-            <p id="comm-area-guest" class="text-slate-500 text-center py-2 italic">로그인 시 글쓰기가 가능합니다.</p>
+            <p id="comm-area-guest" class="text-slate-500 text-center py-2 italic text-sm">로그인 후 글 작성이 가능합니다.</p>
         </div>
         <div id="comm-posts" class="w-full max-w-2xl flex flex-col gap-3 pb-20"></div>
     </div>
@@ -257,15 +254,15 @@
     <!-- Minigame Hub -->
     <div id="screen-minigame-hub" class="screen justify-center">
         <button onclick="window.switchScreen('lobby')" class="text-slate-500 mb-4 font-bold">← 로비로</button>
-        <h2 class="font-title text-4xl text-purple-400 mb-8 uppercase italic">MiniHub</h2>
+        <h2 class="font-title text-4xl text-purple-400 mb-8 uppercase italic tracking-tighter">Arcade</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl px-4 pb-10">
-            <button onclick="window.startMiniGame('feed')" class="bg-gradient-to-br from-pink-600 to-rose-700 p-8 rounded-[2rem] flex flex-col items-center gap-3 shadow-xl active:scale-95 transition-all">🍭 먹이 사냥</button>
-            <button onclick="window.startMiniGame('dodge')" class="bg-gradient-to-br from-orange-600 to-amber-700 p-8 rounded-[2rem] flex flex-col items-center gap-3 shadow-xl active:scale-95 transition-all">💣 폭탄 피하기</button>
-            <button onclick="window.startMiniGame('history')" class="md:col-span-2 bg-gradient-to-br from-emerald-600 to-green-800 p-8 rounded-[2rem] flex items-center justify-center gap-4 shadow-xl active:scale-95 transition-all font-bold text-xl text-white">👨‍🏫 역사 마스터 수업</button>
+            <button onclick="window.startMiniGame('feed')" class="bg-gradient-to-br from-pink-600 to-pink-800 p-8 rounded-3xl flex flex-col items-center gap-3 shadow-xl active:scale-95">🍭 먹이 사냥</button>
+            <button onclick="window.startMiniGame('dodge')" class="bg-gradient-to-br from-orange-600 to-orange-800 p-8 rounded-3xl flex flex-col items-center gap-3 shadow-xl active:scale-95">💣 폭탄 피하기</button>
+            <button onclick="window.startMiniGame('history')" class="md:col-span-2 bg-gradient-to-br from-emerald-600 to-emerald-800 p-8 rounded-3xl flex items-center justify-center gap-4 shadow-xl active:scale-95 font-bold text-xl text-white">👨‍🏫 역사 선생님 모드</button>
         </div>
     </div>
 
-    <!-- Mini-Game Templates -->
+    <!-- Feed MiniGame Screen -->
     <div id="screen-minigame-feed" class="screen justify-center">
         <div id="minigame-feed-area" class="relative w-full max-w-2xl aspect-square bg-slate-900 border-4 border-pink-500/50 rounded-3xl overflow-hidden">
             <div id="mg-feed-timer" class="absolute top-4 left-4 bg-black/50 px-4 py-1 rounded-full font-black text-white z-10">30s</div>
@@ -276,8 +273,9 @@
         </div>
     </div>
 
+    <!-- Dodge MiniGame Screen -->
     <div id="screen-minigame-dodge" class="screen justify-center">
-        <div id="minigame-dodge-area" class="relative w-full max-w-2xl aspect-video bg-slate-950 border-4 border-orange-500/50 rounded-3xl overflow-hidden cursor-none">
+        <div id="minigame-dodge-area" class="relative w-full max-w-2xl aspect-video bg-slate-950 border-4 border-orange-500/50 rounded-3xl overflow-hidden">
             <div id="mg-dodge-timer" class="absolute top-4 left-4 bg-black/50 px-4 py-1 rounded-full font-black text-white z-10">30s</div>
             <div id="mg-dodge-score" class="absolute top-4 right-4 bg-black/50 px-4 py-1 rounded-full font-black text-yellow-400 z-10">0</div>
             <div id="dodge-player" class="absolute bottom-4 left-1/2 -translate-x-1/2 w-12 h-4 bg-blue-500 rounded-full"></div>
@@ -287,8 +285,9 @@
         </div>
     </div>
 
+    <!-- History MiniGame Screen -->
     <div id="screen-minigame-history" class="screen justify-center">
-        <div id="minigame-history-area" class="relative w-full max-w-2xl aspect-video chalkboard border-8 border-yellow-900 rounded-lg flex flex-col items-center justify-center p-4 overflow-hidden">
+        <div id="minigame-history-area" class="relative w-full max-w-2xl aspect-video chalkboard border-8 border-yellow-900 rounded-lg flex flex-col items-center justify-center p-4">
             <div id="mg-history-timer" class="absolute top-4 left-4 font-chalk text-2xl text-white">30s</div>
             <div id="mg-history-score" class="absolute top-4 right-4 font-chalk text-2xl text-yellow-400">0</div>
             <div id="mg-history-content" class="w-full h-full flex flex-col items-center justify-center hidden">
@@ -312,8 +311,8 @@
                 </div>
             </div>
             <div class="flex gap-2">
-                <div id="battle-coin-potential" class="text-lg font-bold text-yellow-400 bg-slate-800/80 px-4 py-1 rounded-2xl border border-slate-700 self-center shadow-inner">🪙 0</div>
-                <button onclick="window.exitGame()" class="bg-red-600 hover:bg-red-500 text-white font-black px-6 py-2 rounded-2xl text-sm transition-all shadow-lg active:scale-95">나가기</button>
+                <div id="battle-coin-potential" class="text-lg font-bold text-yellow-400 bg-slate-800/80 px-4 py-1 rounded-2xl border border-slate-700 self-center">🪙 0</div>
+                <button onclick="window.exitGame()" class="bg-red-600 text-white font-black px-6 py-2 rounded-2xl text-sm transition-all shadow-lg active:scale-95">나가기</button>
             </div>
         </div>
         
@@ -327,7 +326,6 @@
                 <input type="text" id="chat-input-field" class="chat-input" placeholder="채팅...">
             </div>
 
-            <!-- Mobile Controls -->
             <div id="mobile-controls">
                 <div class="d-pad">
                     <div class="ctrl-btn btn-up" id="btn-up">▲</div>
@@ -338,7 +336,7 @@
                 <div id="mobile-dash-btn">⚡</div>
             </div>
 
-            <div id="quiz-overlay" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-[400px] bg-white text-slate-900 p-8 rounded-3xl hidden z-[1000] shadow-2xl border-t-[10px] border-yellow-500">
+            <div id="quiz-overlay" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-[400px] bg-white text-slate-900 p-8 rounded-3xl hidden z-[1000] shadow-2xl border-t-[10px] border-blue-500">
                 <div class="text-xs text-blue-600 font-bold mb-2 uppercase tracking-widest">History Challenge</div>
                 <div id="quiz-question" class="text-lg font-black mb-6 break-keep leading-tight">...</div>
                 <div id="quiz-options" class="flex flex-col gap-3"></div>
@@ -347,7 +345,6 @@
             <div id="gameover-overlay" class="absolute inset-0 bg-slate-950/95 hidden flex-col items-center justify-center z-[2000] p-6 text-center">
                 <div class="text-7xl mb-6">💀</div>
                 <h2 class="font-title text-5xl text-red-500 mb-2 italic">GAME OVER</h2>
-                <p class="text-slate-400 mb-8 font-medium">지렁이가 길을 잃었습니다...</p>
                 <div id="final-coin-gain" class="text-4xl font-black text-yellow-400 mb-10 drop-shadow-lg">🪙 0</div>
                 <button onclick="location.reload()" class="bg-white text-black px-14 py-4 rounded-full font-black text-xl shadow-xl hover:scale-105 active:scale-95 transition-all">로비로 귀환</button>
             </div>
@@ -370,7 +367,7 @@
         measurementId: "G-Y7KJ62DER2"
     };
 
-    const appId = "snake-evolution-final-respawn";
+    const appId = "snake-evolution-pro-v8-fixed";
     const state = {
         app: null, auth: null, db: null, user: null,
         userData: { nickname: "지렁이", coins: 0, unlockedSkins: ['blue'], selectedSkin: 'blue' },
@@ -380,33 +377,32 @@
         lastMultiplayerUpdate: 0,
         isDashing: false,
         touchStart: { x: 0, y: 0 },
-        tick: 0
+        tick: 0,
+        unsubscribePlayers: null
     };
 
     const CONFIG = {
         GRID_SIZE: 20, TILE_COUNT: 125,
         SKINS: [
-            { id: 'blue', color: '#3b82f6', name: '기본 블루', price: 0, type: 'basic' }, 
-            { id: 'purple', color: '#a855f7', name: '심해 퍼플', price: 300, type: 'basic' }, 
-            { id: 'emerald', color: '#10b981', name: '에메랄드', price: 600, type: 'rare' },
-            { id: 'lava', color: '#ef4444', name: '불타는 용암', price: 900, type: 'rare' },
-            { id: 'ocean', color: '#0ea5e9', name: '청정 바다', price: 1200, type: 'rare' },
-            { id: 'neon', color: '#f472b6', name: '네온 핑크', price: 1500, type: 'epic' },
-            { id: 'diamond', color: '#67e8f9', name: '다이아몬드', price: 2500, type: 'epic' },
-            { id: 'shadow', color: '#334155', name: '어둠의 그림자', price: 2000, type: 'epic' },
-            { id: 'gold', color: '#fbbf24', name: '레전더리 골드', price: 5000, type: 'legendary' },
-            { id: 'rainbow', color: 'rainbow', name: '레인보우', price: 9999, type: 'legendary' }
+            { id: 'blue', color: '#3b82f6', name: '기본 블루', price: 0, rarity: 'basic' }, 
+            { id: 'purple', color: '#a855f7', name: '심해 퍼플', price: 300, rarity: 'basic' }, 
+            { id: 'emerald', color: '#10b981', name: '에메랄드', price: 600, rarity: 'rare' },
+            { id: 'lava', color: '#ef4444', name: '불타는 용암', price: 900, rarity: 'rare' },
+            { id: 'ocean', color: '#0ea5e9', name: '청정 바다', price: 1200, rarity: 'rare' },
+            { id: 'neon', color: '#f472b6', name: '네온 핑크', price: 1800, rarity: 'epic' },
+            { id: 'diamond', color: '#67e8f9', name: '다이아몬드', price: 2500, rarity: 'epic' },
+            { id: 'shadow', color: '#334155', name: '그림자', price: 2000, rarity: 'epic' },
+            { id: 'gold', color: 'gold', name: '레전더리 골드', price: 5000, rarity: 'legendary' },
+            { id: 'rainbow', color: 'rainbow', name: '레인보우', price: 9999, rarity: 'legendary' }
         ],
         QUIZZES: [
-            { q: "1866년 프랑스군이 강화도를 침략하여 외규장각 도서를 약탈해 간 사건은?", a: ["병인양요", "신미양요", "임진왜란", "병자호란"], c: 0 },
-            { q: "조선 후기, 실생활에 도움이 되는 학문을 연구하자는 주장은?", a: ["성리학", "실학", "불교", "도교"], c: 1 },
-            { q: "영조가 당파 싸움을 없애고 인재를 고루 등용하기 위해 실시한 정책은?", a: ["탕평책", "골품제", "과거제", "화랑도"], c: 0 },
-            { q: "하얼빈 역에서 이토 히로부미를 사살한 독립운동가는?", a: ["안중근", "윤봉길", "이봉창", "김구"], c: 0 },
-            { q: "1919년 3월 1일 일어난 거국적 독립 만세 운동은?", a: ["3.1 운동", "6.10 만세운동", "갑신정변", "아관파천"], c: 0 }
+            { q: "1866년 프랑스군이 강화도를 침략하여 외규장각 도서를 약탈한 사건은?", a: ["병인양요", "신미양요", "임진왜란", "병자호란"], c: 0 },
+            { q: "흥선대원군이 서양과 통상 수교를 거부하겠다는 의지를 담아 세운 비석은?", a: ["척화비", "광개토대왕비", "진흥왕순수비", "중원비"], c: 0 },
+            { q: "1905년 일제가 대한제국의 외교권을 강제로 빼앗은 조약은?", a: ["을사늑약", "정미7조약", "한일의정서", "강화도조약"], c: 0 },
+            { q: "조선 후기, 실생활에 도움이 되는 학문을 연구하자는 주장은?", a: ["성리학", "실학", "불교", "도교"], c: 1 }
         ]
     };
 
-    // --- Snake Logic ---
     class Snake {
         constructor(id, x, y, skinId, name, isPlayer = false) {
             this.id = id;
@@ -417,26 +413,21 @@
             this.dx = 0; this.dy = -1;
             this.nextDx = 0; this.nextDy = -1;
             this.alive = true;
-            this.respawnTimer = 0; // AI 전용 리스폰 타이머
+            this.respawnTimer = 0;
         }
         update() {
             if (!this.alive) {
-                if(!this.isPlayer) { // AI 리스폰 처리
+                if(!this.isPlayer) {
                     this.respawnTimer--;
-                    if(this.respawnTimer <= 0) this.reset();
+                    if(this.respawnTimer <= 0) this.respawn();
                 }
                 return;
             }
-
             this.dx = this.nextDx; this.dy = this.nextDy;
             const head = { x: this.body[0].x + this.dx, y: this.body[0].y + this.dy };
-            
-            // Wall death
             if (head.x < 0 || head.x >= CONFIG.TILE_COUNT || head.y < 0 || head.y >= CONFIG.TILE_COUNT) { this.die(); return; }
-
-            // Collision Check
             let collided = false;
-            for(let part of this.body) if(head.x === part.x && head.y === part.y) { collided = true; break; }
+            for(let i=0; i<this.body.length; i++) if(head.x === this.body[i].x && head.y === this.body[i].y) { collided = true; break; }
             if(!collided) {
                 const others = state.gameMode === 'multi' ? Object.values(state.remotePlayers) : state.ais;
                 for(let other of others) {
@@ -449,137 +440,77 @@
                 }
             }
             if(collided) { this.die(); return; }
-
             this.body.unshift(head);
             let ate = false;
-            for (let i = state.foods.length - 1; i >= 0; i--) {
-                if (head.x === state.foods[i].x && head.y === state.foods[i].y) {
-                    state.foods.splice(i, 1);
-                    if (this.isPlayer) { state.score += 10; updateBattleUI(); }
-                    spawnItem('food'); ate = true; break;
-                }
+            for (let i = state.foods.length - 1; i >= 0; i--) if (head.x === state.foods[i].x && head.y === state.foods[i].y) {
+                state.foods.splice(i, 1); if (this.isPlayer) { state.score += 10; updateBattleUI(); }
+                spawnItem('food'); ate = true; break;
             }
-            if (!ate) {
-                for (let i = state.historyItems.length - 1; i >= 0; i--) {
-                    if (head.x === state.historyItems[i].x && head.y === state.historyItems[i].y) {
-                        state.historyItems.splice(i, 1); if (this.isPlayer) triggerQuiz();
-                        spawnItem('history'); ate = true; break;
-                    }
-                }
+            if (!ate) for (let i = state.historyItems.length - 1; i >= 0; i--) if (head.x === state.historyItems[i].x && head.y === state.historyItems[i].y) {
+                state.historyItems.splice(i, 1); if (this.isPlayer) triggerQuiz();
+                spawnItem('history'); ate = true; break;
             }
             if (!ate) this.body.pop();
             if (!this.isPlayer) this.aiLogic();
         }
         aiLogic() {
-            if (Math.random() > 0.2) return;
+            if (Math.random() > 0.15) return;
             const target = state.foods[0];
             if (!target) return;
             let ndx = target.x > this.body[0].x ? 1 : (target.x < this.body[0].x ? -1 : 0);
             let ndy = ndx === 0 ? (target.y > this.body[0].y ? 1 : -1) : 0;
             if (ndx !== -this.dx || ndy !== -this.dy) { this.nextDx = ndx; this.nextDy = ndy; }
         }
-        die() { 
-            this.alive = false; 
-            if (this.isPlayer) gameOver(); 
-            else this.respawnTimer = 30; // AI 부활까지 약 3초 (100ms * 30)
-        }
-        reset() { // AI 초기화 및 부활
+        die() { this.alive = false; if (this.isPlayer) gameOver(); else this.respawnTimer = 30; }
+        respawn() {
             const rx = Math.floor(Math.random() * (CONFIG.TILE_COUNT - 20) + 10);
             const ry = Math.floor(Math.random() * (CONFIG.TILE_COUNT - 20) + 10);
             this.body = Array(7).fill(0).map((_, i) => ({ x: rx, y: ry + i }));
-            this.alive = true;
-            this.dx = 0; this.dy = -1; this.nextDx = 0; this.nextDy = -1;
+            this.alive = true; this.dx = 0; this.dy = -1; this.nextDx = 0; this.nextDy = -1;
         }
         draw(ctx, cam) {
             if (!this.alive) return;
-            
-            // Draw body segments (back to front)
             for (let i = this.body.length - 1; i >= 0; i--) {
-                const seg = this.body[i];
-                const sx = seg.x * CONFIG.GRID_SIZE - cam.x + 10;
-                const sy = seg.y * CONFIG.GRID_SIZE - cam.y + 10;
-                
+                const seg = this.body[i], sx = seg.x * CONFIG.GRID_SIZE - cam.x + 10, sy = seg.y * CONFIG.GRID_SIZE - cam.y + 10;
                 let color = this.skin.color;
-                if(color === 'rainbow') color = `hsl(${(state.tick * 5 + i * 15) % 360}, 80%, 60%)`;
-                
+                if(color === 'rainbow') color = `hsl(${(state.tick * 6 + i * 15) % 360}, 80%, 60%)`;
                 if (i === 0) {
-                    // Head - Triangle with rounded organic feel
-                    ctx.save();
-                    ctx.translate(sx, sy);
-                    ctx.rotate(Math.atan2(this.dy, this.dx));
-                    
-                    // Head shape
-                    ctx.beginPath();
-                    ctx.moveTo(15, 0); ctx.lineTo(-10, 12); ctx.lineTo(-10, -12); ctx.closePath();
-                    ctx.fillStyle = color;
-                    if(this.skin.id === 'gold') {
-                        let grad = ctx.createRadialGradient(0, 0, 2, 0, 0, 15);
-                        grad.addColorStop(0, '#fef3c7'); grad.addColorStop(1, '#d97706');
-                        ctx.fillStyle = grad;
-                    }
+                    ctx.save(); ctx.translate(sx, sy); ctx.rotate(Math.atan2(this.dy, this.dx));
+                    ctx.beginPath(); ctx.moveTo(15, 0); ctx.lineTo(-10, 12); ctx.lineTo(-10, -12); ctx.closePath();
+                    ctx.fillStyle = color; if(this.skin.id === 'gold') { let g = ctx.createRadialGradient(0,0,2,0,0,15); g.addColorStop(0, '#fff4b1'); g.addColorStop(1, '#d97706'); ctx.fillStyle = g; }
                     ctx.fill();
-                    
-                    // Eyes (Realistic: White + Black pupil)
-                    ctx.fillStyle = 'white';
-                    ctx.beginPath(); ctx.arc(2, -6, 5, 0, Math.PI*2); ctx.fill();
-                    ctx.beginPath(); ctx.arc(2, 6, 5, 0, Math.PI*2); ctx.fill();
-                    
-                    // Pupils
-                    ctx.fillStyle = 'black';
-                    ctx.beginPath(); ctx.arc(4, -6, 2, 0, Math.PI*2); ctx.fill();
-                    ctx.beginPath(); ctx.arc(4, 6, 2, 0, Math.PI*2); ctx.fill();
-                    
+                    ctx.fillStyle = 'white'; ctx.beginPath(); ctx.arc(2, -6, 5, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(2, 6, 5, 0, Math.PI*2); ctx.fill();
+                    ctx.fillStyle = 'black'; ctx.beginPath(); ctx.arc(4, -6, 2, 0, Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(4, 6, 2, 0, Math.PI*2); ctx.fill();
                     ctx.restore();
-                    
-                    ctx.fillStyle = 'white'; ctx.font = 'bold 12px Pretendard'; ctx.textAlign = 'center';
-                    ctx.fillText(this.name, sx, sy - 22);
+                    ctx.fillStyle = 'white'; ctx.font = 'bold 11px Pretendard'; ctx.textAlign = 'center'; ctx.fillText(this.name, sx, sy - 22);
                 } else {
-                    // Organic Body Segments
-                    ctx.globalAlpha = Math.max(0.5, 1 - i / (this.body.length + 10));
-                    ctx.beginPath();
-                    ctx.arc(sx, sy, 11 - Math.min(5, i/4), 0, Math.PI * 2);
-                    ctx.fillStyle = color;
-                    ctx.fill();
-                    
-                    // Segment detail
-                    ctx.strokeStyle = 'rgba(0,0,0,0.1)';
-                    ctx.lineWidth = 1;
-                    ctx.stroke();
+                    ctx.globalAlpha = Math.max(0.4, 1 - i / (this.body.length + 5));
+                    ctx.beginPath(); ctx.arc(sx, sy, 11 - Math.min(5, i/3), 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill();
+                    ctx.strokeStyle = 'rgba(0,0,0,0.1)'; ctx.stroke();
                 }
             }
             ctx.globalAlpha = 1;
         }
     }
 
-    // --- Firebase Init ---
     async function initFirebase() {
         try {
             state.app = initializeApp(firebaseConfig);
             state.auth = getAuth(state.app);
             state.db = getFirestore(state.app);
-
             onAuthStateChanged(state.auth, async (user) => {
                 state.user = user;
                 if (user) {
-                    document.getElementById('user-id-display').innerText = `SERVER CONNECTED: ${user.uid.substring(0,6)}`;
-                    document.getElementById('btn-start-multi').disabled = false;
-                    document.getElementById('btn-start-multi').classList.remove('opacity-50');
-                    document.getElementById('comm-area-connected')?.classList.remove('hidden');
-                    document.getElementById('comm-area-guest')?.classList.add('hidden');
-                    
-                    const userDoc = await getDoc(doc(state.db, 'artifacts', appId, 'users', user.uid, 'profile', 'data'));
-                    if(userDoc.exists()) state.userData = { ...state.userData, ...userDoc.data() };
+                    document.getElementById('user-id-display').innerText = `SERVER ACTIVE: ${user.uid.substring(0,6)}`;
+                    document.getElementById('btn-start-multi').disabled = false; document.getElementById('btn-start-multi').classList.remove('opacity-50');
+                    document.getElementById('comm-area-connected')?.classList.remove('hidden'); document.getElementById('comm-area-guest')?.classList.add('hidden');
+                    const d = await getDoc(doc(state.db, 'artifacts', appId, 'users', user.uid, 'profile', 'data'));
+                    if(d.exists()) state.userData = { ...state.userData, ...d.data() };
                     updateUI();
                 }
             });
-            await signInAnonymously(state.auth);
-        } catch(e) { document.getElementById('user-id-display').innerText = "OFFLINE MODE"; }
-    }
-
-    // --- System Functions ---
-    async function syncData() {
-        if(!state.user) return;
-        try { await setDoc(doc(state.db, 'artifacts', appId, 'users', state.user.uid, 'profile', 'data'), state.userData, {merge:true}); } catch(e) {}
+            await signInAnonymously(state.auth).catch(() => { document.getElementById('user-id-display').innerText = "GUEST MODE (OFFLINE)"; });
+        } catch(e) { document.getElementById('user-id-display').innerText = "CONNECTION ERROR"; }
     }
 
     window.switchScreen = (id) => {
@@ -587,56 +518,29 @@
         if(!target) return;
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         target.classList.add('active');
-        if (id === 'lobby') updateUI();
+        if (id === 'lobby' || id === 'shop') updateUI();
         if (id === 'shop') updateShopUI();
     };
 
     function updateShopUI() {
-        const list = document.getElementById('skin-list');
-        if(!list) return;
-        list.innerHTML = '';
+        const list = document.getElementById('skin-list'); if(!list) return; list.innerHTML = '';
         CONFIG.SKINS.forEach(skin => {
-            const isUnlocked = state.userData.unlockedSkins.includes(skin.id);
-            const isSelected = state.userData.selectedSkin === skin.id;
+            const isUnlocked = state.userData.unlockedSkins.includes(skin.id), isSelected = state.userData.selectedSkin === skin.id;
             const card = document.createElement('div');
             card.className = `skin-card p-5 rounded-3xl bg-slate-800 border-4 cursor-pointer flex flex-col items-center ${isSelected ? 'border-blue-500 shadow-xl' : 'border-slate-700'}`;
-            
-            let skinPreview = `<div class="w-16 h-16 rounded-full mb-4 shadow-inner" style="background:${skin.color === 'rainbow' ? 'linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet)' : skin.color}"></div>`;
-            
-            card.innerHTML = `
-                ${skinPreview}
-                <div class="text-sm font-black mb-1">${skin.name}</div>
-                <div class="text-[10px] text-slate-500 uppercase font-bold mb-4 tracking-tighter">${skin.type}</div>
-                <button class="w-full py-2 rounded-xl text-xs font-black transition-all ${isUnlocked ? (isSelected ? 'bg-blue-600' : 'bg-slate-600') : 'bg-yellow-600 text-black'}">
-                    ${isUnlocked ? (isSelected ? '장착 중' : '장착하기') : '🪙 '+skin.price.toLocaleString()}
-                </button>
-            `;
-            
+            const prev = skin.color === 'rainbow' ? 'linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet)' : skin.color;
+            card.innerHTML = `<div class="w-16 h-16 rounded-full mb-4" style="background:${prev}"></div><div class="text-sm font-black mb-1">${skin.name}</div><button class="w-full py-2 rounded-xl text-xs font-black ${isUnlocked ? (isSelected ? 'bg-blue-600' : 'bg-slate-600') : 'bg-yellow-600 text-black'}">${isUnlocked ? (isSelected ? '장착 됨' : '장착하기') : '🪙 '+skin.price}</button>`;
             card.onclick = async () => {
-                if(isUnlocked) {
-                    state.userData.selectedSkin = skin.id;
-                } else if(state.userData.coins >= skin.price) {
-                    state.userData.coins -= skin.price;
-                    state.userData.unlockedSkins.push(skin.id);
-                    state.userData.selectedSkin = skin.id;
-                } else {
-                    return; 
-                }
-                updateShopUI(); updateUI(); await syncData();
+                if(isUnlocked) state.userData.selectedSkin = skin.id;
+                else if(state.userData.coins >= skin.price) { state.userData.coins -= skin.price; state.userData.unlockedSkins.push(skin.id); state.userData.selectedSkin = skin.id; }
+                updateShopUI(); updateUI(); if(state.user) await setDoc(doc(state.db, 'artifacts', appId, 'users', state.user.uid, 'profile', 'data'), state.userData, {merge:true});
             };
             list.appendChild(card);
         });
     }
 
-    window.exitGame = async () => {
-        state.isPaused = true; if(state.gameLoop) clearInterval(state.gameLoop);
-        window.switchScreen('lobby');
-    };
-
-    // --- Mini-Games ---
     window.startMiniGame = (type) => {
-        state.activeMiniGame = type;
-        window.switchScreen('minigame-' + type);
+        state.activeMiniGame = type; window.switchScreen('minigame-' + type);
         document.getElementById(`mg-${type}-start-overlay`)?.classList.remove('hidden');
         if(type === 'history') document.getElementById('mg-history-content')?.classList.add('hidden');
         state.mgScore = 0; state.mgTime = 30;
@@ -647,101 +551,59 @@
         const area = document.getElementById('minigame-feed-area');
         const spawn = () => {
             if(state.mgTime <= 0) return;
-            const dot = document.createElement('div');
-            dot.className = "absolute w-12 h-12 rounded-full flex items-center justify-center text-2xl animate-bounce";
-            dot.style.left = Math.random() * (area.clientWidth - 60) + 'px';
-            dot.style.top = Math.random() * (area.clientHeight - 60) + 'px';
-            dot.style.background = `hsl(${Math.random()*360}, 70%, 50%)`;
-            dot.innerText = "🍭";
+            const dot = document.createElement('div'); dot.className = "absolute w-12 h-12 rounded-full flex items-center justify-center text-2xl animate-bounce cursor-pointer";
+            dot.style.left = Math.random()*(area.clientWidth-60)+'px'; dot.style.top = Math.random()*(area.clientHeight-60)+'px';
+            dot.style.background = `hsl(${Math.random()*360},70%,50%)`; dot.innerText = "🍭";
             dot.onclick = (e) => { e.stopPropagation(); state.mgScore++; document.getElementById('mg-feed-score').innerText = state.mgScore; dot.remove(); spawn(); };
-            area.appendChild(dot);
-            setTimeout(() => { if(dot.parentElement) dot.remove(); }, 1500);
+            area.appendChild(dot); setTimeout(() => dot.remove(), 1200);
         };
-        spawn(); spawn(); spawn();
-        state.mgInterval = setInterval(() => {
-            state.mgTime--; document.getElementById('mg-feed-timer').innerText = state.mgTime + 's';
-            if (state.mgTime <= 0) endMiniGame();
-        }, 1000);
+        spawn(); spawn();
+        state.mgInterval = setInterval(() => { state.mgTime--; document.getElementById('mg-feed-timer').innerText = state.mgTime+'s'; if(state.mgTime<=0) endMiniGame(); }, 1000);
     };
 
     window.runMiniGameDodge = () => {
         document.getElementById('mg-dodge-start-overlay')?.classList.add('hidden');
-        const area = document.getElementById('minigame-dodge-area');
-        const player = document.getElementById('dodge-player');
-        area.onmousemove = (e) => {
-            const rect = area.getBoundingClientRect();
-            let x = e.clientX - rect.left - 24;
-            x = Math.max(0, Math.min(x, area.clientWidth - 48));
-            if(player) player.style.left = x + 'px';
-        };
+        const area = document.getElementById('minigame-dodge-area'), p = document.getElementById('dodge-player');
+        area.onmousemove = (e) => { let x = e.clientX-area.getBoundingClientRect().left-24; p.style.left = Math.max(0,Math.min(x,area.clientWidth-48))+'px'; };
         const spawn = () => {
-            if (state.mgTime <= 0) return;
-            const obj = document.createElement('div');
-            const isCoin = Math.random() > 0.8;
-            obj.className = "absolute text-2xl top-0";
-            obj.innerText = isCoin ? "🪙" : "💣";
-            obj.style.left = Math.random() * (area.clientWidth - 30) + 'px';
-            area.appendChild(obj);
-            let pos = 0;
+            if(state.mgTime<=0) return;
+            const obj = document.createElement('div'); let isCoin = Math.random()>0.8;
+            obj.className = "absolute text-2xl top-0"; obj.innerText = isCoin?"🪙":"💣"; obj.style.left = Math.random()*(area.clientWidth-30)+'px';
+            area.appendChild(obj); let pos = 0;
             const fall = setInterval(() => {
-                pos += 5; obj.style.top = pos + 'px';
-                const pRect = player.getBoundingClientRect(), oRect = obj.getBoundingClientRect();
-                if (oRect.bottom > pRect.top && oRect.left < pRect.right && oRect.right > pRect.left && oRect.top < pRect.bottom) {
-                    if(isCoin) state.mgScore += 2; else state.mgScore = Math.max(0, state.mgScore - 5);
-                    document.getElementById('mg-dodge-score').innerText = state.mgScore;
-                    clearInterval(fall); obj.remove();
-                }
-                if (pos > area.clientHeight || state.mgTime <= 0) { clearInterval(fall); obj.remove(); }
-            }, 16);
-            setTimeout(spawn, 450);
+                pos += 5; obj.style.top = pos+'px';
+                const pRect = p.getBoundingClientRect(), oRect = obj.getBoundingClientRect();
+                if(oRect.bottom>pRect.top && oRect.left<pRect.right && oRect.right>pRect.left && oRect.top<pRect.bottom) { if(isCoin)state.mgScore+=2; else state.mgScore=Math.max(0,state.mgScore-5); document.getElementById('mg-dodge-score').innerText=state.mgScore; clearInterval(fall); obj.remove(); }
+                if(pos>area.clientHeight || state.mgTime<=0) { clearInterval(fall); obj.remove(); }
+            }, 16); setTimeout(spawn, 500);
         };
-        spawn();
-        state.mgInterval = setInterval(() => {
-            state.mgTime--; document.getElementById('mg-dodge-timer').innerText = state.mgTime + 's';
-            if (state.mgTime <= 0) endMiniGame();
-        }, 1000);
+        spawn(); state.mgInterval = setInterval(() => { state.mgTime--; document.getElementById('mg-dodge-timer').innerText = state.mgTime+'s'; if(state.mgTime<=0) endMiniGame(); }, 1000);
     };
 
     window.runMiniGameHistory = () => {
-        document.getElementById('mg-history-start-overlay')?.classList.add('hidden');
-        document.getElementById('mg-history-content')?.classList.remove('hidden');
+        document.getElementById('mg-history-start-overlay')?.classList.add('hidden'); document.getElementById('mg-history-content')?.classList.remove('hidden');
         const nextQ = () => {
-            if(state.mgTime <= 0) return;
+            if(state.mgTime<=0) return;
             const q = CONFIG.QUIZZES[Math.floor(Math.random()*CONFIG.QUIZZES.length)];
             document.getElementById('mg-history-q').innerText = q.q;
             const opts = document.getElementById('mg-history-options'); opts.innerHTML = '';
             q.a.forEach((ans, idx) => {
-                const b = document.createElement('button');
-                b.className = "bg-slate-700 p-3 rounded-xl text-sm font-bold text-white active:scale-95 transition-all";
-                b.innerText = ans;
-                b.onclick = () => {
-                    if (idx === q.c) { state.mgScore += 10; document.getElementById('mg-history-score').innerText = state.mgScore; b.style.backgroundColor = '#10b981'; }
-                    else { b.style.backgroundColor = '#ef4444'; }
-                    setTimeout(nextQ, 300);
-                };
+                const b = document.createElement('button'); b.className = "bg-slate-700 p-3 rounded-xl text-sm font-bold text-white active:scale-95"; b.innerText = ans;
+                b.onclick = () => { if(idx===q.c){state.mgScore+=10; document.getElementById('mg-history-score').innerText=state.mgScore; b.style.backgroundColor='#10b981';} else b.style.backgroundColor='#ef4444'; setTimeout(nextQ, 300); };
                 opts.appendChild(b);
             });
         };
-        nextQ();
-        state.mgInterval = setInterval(() => {
-            state.mgTime--; document.getElementById('mg-history-timer').innerText = state.mgTime + 's';
-            if (state.mgTime <= 0) endMiniGame();
-        }, 1000);
+        nextQ(); state.mgInterval = setInterval(() => { state.mgTime--; document.getElementById('mg-history-timer').innerText = state.mgTime+'s'; if(state.mgTime<=0) endMiniGame(); }, 1000);
     };
 
     const endMiniGame = async () => {
-        clearInterval(state.mgInterval);
-        const gain = state.mgScore * 5;
-        state.userData.coins += gain;
-        const area = document.querySelector(`.screen.active > div:first-child`);
-        const overlay = document.createElement('div');
-        overlay.className = "absolute inset-0 bg-black/95 z-[100] flex flex-col items-center justify-center text-center p-6";
-        overlay.innerHTML = `<div class="text-5xl font-black text-yellow-400 mb-2">TIME OVER!</div><div class="text-2xl mb-8 font-bold">획득 보상: 🪙 ${gain.toLocaleString()}</div><button onclick="location.reload()" class="bg-white text-black px-12 py-3 rounded-full font-black text-lg shadow-xl active:scale-95">로비로 돌아가기</button>`;
-        area.appendChild(overlay);
-        await syncData();
+        clearInterval(state.mgInterval); let gain = state.mgScore*5; state.userData.coins += gain;
+        const ov = document.createElement('div'); ov.className = "absolute inset-0 bg-black/95 z-[100] flex flex-col items-center justify-center text-center p-6";
+        ov.innerHTML = `<div class="text-4xl font-black text-yellow-400 mb-2">종료!</div><div class="text-xl mb-8">🪙 ${gain} 획득</div><button onclick="location.reload()" class="bg-white text-black px-10 py-3 rounded-full font-black">로비로</button>`;
+        document.querySelector('.screen.active > div:first-child')?.appendChild(ov);
+        if(state.user) await setDoc(doc(state.db, 'artifacts', appId, 'users', state.user.uid, 'profile', 'data'), state.userData, {merge:true});
     };
 
-    // --- Main Game Loop ---
     function initGame(mode) {
         state.gameMode = mode; window.switchScreen('battle');
         const nick = document.getElementById('nickname-input').value || "지렁이";
@@ -752,124 +614,42 @@
         if(mode==='single') state.ais = Array(8).fill(0).map((_,i) => new Snake('ai'+i, Math.random()*110, Math.random()*110, CONFIG.SKINS[i % 5].id, 'Worm_'+i));
         state.isPaused = false; state.score = 0; updateBattleUI();
         const canvas = document.getElementById('gameCanvas'); canvas.width = 800; canvas.height = 500;
-        if(state.gameLoop) clearInterval(state.gameLoop);
-        state.gameLoop = setInterval(run, 100);
+        if(state.gameLoop) clearInterval(state.gameLoop); state.gameLoop = setInterval(run, 100);
     }
 
     function run() {
         if (state.isPaused || !state.player) return;
-        state.tick++;
-        const iters = state.isDashing ? 2 : 1;
-        for(let i=0; i<iters; i++) {
-            state.player.update();
-            if(!state.player.alive) break;
-        }
+        state.tick++; const iters = state.isDashing ? 2 : 1;
+        for(let i=0; i<iters; i++) { state.player.update(); if(!state.player.alive) break; }
         state.ais.forEach(a => a.update());
-
         state.camera.x = state.player.body[0].x * CONFIG.GRID_SIZE - 400;
         state.camera.y = state.player.body[0].y * CONFIG.GRID_SIZE - 250;
-        
         const ctx = document.getElementById('gameCanvas').getContext('2d');
         ctx.fillStyle = '#020617'; ctx.fillRect(0, 0, 800, 500);
-        
-        // Background Grid
         ctx.strokeStyle = '#1e293b'; ctx.lineWidth = 0.5;
-        const gridOffset = 40;
-        for(let x=Math.floor(state.camera.x/gridOffset)*gridOffset; x<state.camera.x+840; x+=gridOffset) { ctx.beginPath(); ctx.moveTo(x-state.camera.x,0); ctx.lineTo(x-state.camera.x,500); ctx.stroke(); }
-        for(let y=Math.floor(state.camera.y/gridOffset)*gridOffset; y<state.camera.y+540; y+=gridOffset) { ctx.beginPath(); ctx.moveTo(0,y-state.camera.y); ctx.lineTo(800,y-state.camera.y); ctx.stroke(); }
-
-        // Items
+        for(let x=Math.floor(state.camera.x/40)*40; x<state.camera.x+840; x+=40) { ctx.beginPath(); ctx.moveTo(x-state.camera.x,0); ctx.lineTo(x-state.camera.x,500); ctx.stroke(); }
+        for(let y=Math.floor(state.camera.y/40)*40; y<state.camera.y+540; y+=40) { ctx.beginPath(); ctx.moveTo(0,y-state.camera.y); ctx.lineTo(800,y-state.camera.y); ctx.stroke(); }
         ctx.fillStyle = '#10b981'; state.foods.forEach(f => { ctx.beginPath(); ctx.arc(f.x*20-state.camera.x+10, f.y*20-state.camera.y+10, 5, 0, Math.PI*2); ctx.fill(); });
         ctx.fillStyle = '#fbbf24'; state.historyItems.forEach(h => { ctx.beginPath(); ctx.arc(h.x*20-state.camera.x+10, h.y*20-state.camera.y+10, 7, 0, Math.PI*2); ctx.fill(); });
-        
-        // Snakes
-        state.ais.forEach(a => a.draw(ctx, state.camera));
-        state.player.draw(ctx, state.camera);
-        
+        state.ais.forEach(a => a.draw(ctx, state.camera)); state.player.draw(ctx, state.camera);
         drawMinimap();
     }
 
-    function spawnItem(t) {
-        const p = { x: Math.floor(Math.random()*CONFIG.TILE_COUNT), y: Math.floor(Math.random()*CONFIG.TILE_COUNT) };
-        if(t==='food') state.foods.push(p); else state.historyItems.push(p);
-    }
-
-    function drawMinimap() {
-        const ctx = document.getElementById('minimap').getContext('2d'), s = 120/CONFIG.TILE_COUNT;
-        ctx.clearRect(0,0,120,120);
-        ctx.fillStyle = '#ef4444';
-        state.ais.forEach(a => { if(a.alive) ctx.fillRect(a.body[0].x*s, a.body[0].y*s, 2, 2); });
-        ctx.fillStyle = '#3b82f6';
-        ctx.beginPath(); ctx.arc(state.player.body[0].x*s, state.player.body[0].y*s, 3, 0, Math.PI*2); ctx.fill();
-    }
-
+    function spawnItem(t) { const p = { x: Math.floor(Math.random()*CONFIG.TILE_COUNT), y: Math.floor(Math.random()*CONFIG.TILE_COUNT) }; if(t==='food') state.foods.push(p); else state.historyItems.push(p); }
+    function drawMinimap() { const ctx = document.getElementById('minimap').getContext('2d'), s = 120/CONFIG.TILE_COUNT; ctx.clearRect(0,0,120,120); ctx.fillStyle = '#ef4444'; state.ais.forEach(a => { if(a.alive) ctx.fillRect(a.body[0].x*s, a.body[0].y*s, 2, 2); }); ctx.fillStyle = '#3b82f6'; ctx.beginPath(); ctx.arc(state.player.body[0].x*s, state.player.body[0].y*s, 3, 0, Math.PI*2); ctx.fill(); }
     function updateBattleUI() { document.getElementById('battle-score').innerText = state.score; document.getElementById('battle-coin-potential').innerText = `🪙 ${Math.floor(state.score/5)}`; }
     function updateUI() { document.getElementById('lobby-coin').innerText = state.userData.coins.toLocaleString(); document.getElementById('shop-coin').innerText = state.userData.coins.toLocaleString(); }
-
-    async function gameOver() {
-        state.isPaused = true; clearInterval(state.gameLoop);
-        const gain = Math.floor(state.score/5); state.userData.coins += gain;
-        await syncData();
-        document.getElementById('final-coin-gain').innerText = `🪙 ${gain.toLocaleString()}`;
-        document.getElementById('gameover-overlay').classList.remove('hidden');
-    }
-
-    function triggerQuiz() {
-        state.isPaused = true;
-        const q = CONFIG.QUIZZES[Math.floor(Math.random()*CONFIG.QUIZZES.length)], ov = document.getElementById('quiz-overlay');
-        document.getElementById('quiz-question').innerText = q.q;
-        const opts = document.getElementById('quiz-options'); opts.innerHTML = '';
-        q.a.forEach((t, i) => {
-            const b = document.createElement('button');
-            b.className = "w-full text-left p-4 rounded-2xl border-2 border-slate-200 text-sm font-black active:bg-blue-50 transition-all";
-            b.innerText = t;
-            b.onclick = () => { if(i===q.c) state.score += 500; ov.classList.add('hidden'); state.isPaused = false; updateBattleUI(); };
-            opts.appendChild(b);
-        });
-        ov.classList.remove('hidden');
-    }
-
-    // --- Input & Control ---
-    const setDir = (dx, dy) => {
-        if (!state.player || state.isPaused) return;
-        if (dx === -state.player.dx && dy === -state.player.dy) return;
-        state.player.nextDx = dx; state.player.nextDy = dy;
-    };
-    document.getElementById('btn-up').onclick = () => setDir(0, -1);
-    document.getElementById('btn-down').onclick = () => setDir(0, 1);
-    document.getElementById('btn-left').onclick = () => setDir(-1, 0);
-    document.getElementById('btn-right').onclick = () => setDir(1, 0);
-    window.addEventListener('keydown', e => {
-        const k = e.key.toLowerCase();
-        if(k==='w'||k==='arrowup') setDir(0,-1);
-        if(k==='s'||k==='arrowdown') setDir(0,1);
-        if(k==='a'||k==='arrowleft') setDir(-1,0);
-        if(k==='d'||k==='arrowright') setDir(1,0);
-        if(e.code==='Space') { state.isDashing = true; document.getElementById('dash-effect').classList.add('active'); document.getElementById('battle-dash-text').classList.remove('hidden'); }
-    });
+    async function gameOver() { state.isPaused = true; clearInterval(state.gameLoop); let gain = Math.floor(state.score/5); state.userData.coins += gain; if(state.user) try { await setDoc(doc(state.db, 'artifacts', appId, 'users', state.user.uid, 'profile', 'data'), state.userData, {merge:true}); } catch(e) {} document.getElementById('final-coin-gain').innerText = `🪙 ${gain.toLocaleString()}`; document.getElementById('gameover-overlay').classList.remove('hidden'); }
+    function triggerQuiz() { state.isPaused = true; const q = CONFIG.QUIZZES[Math.floor(Math.random()*CONFIG.QUIZZES.length)], ov = document.getElementById('quiz-overlay'); document.getElementById('quiz-question').innerText = q.q; const opts = document.getElementById('quiz-options'); opts.innerHTML = ''; q.a.forEach((t, i) => { const b = document.createElement('button'); b.className = "w-full text-left p-4 rounded-2xl border-2 border-slate-200 text-sm font-black active:bg-blue-50 transition-all"; b.innerText = t; b.onclick = () => { if(i===q.c) state.score += 500; ov.classList.add('hidden'); state.isPaused = false; updateBattleUI(); }; opts.appendChild(b); }); ov.classList.remove('hidden'); }
+    window.exitGame = async () => { state.isPaused = true; if(state.gameLoop) clearInterval(state.gameLoop); window.switchScreen('lobby'); };
+    const setDir = (dx, dy) => { if (!state.player || state.isPaused) return; if (dx === -state.player.dx && dy === -state.player.dy) return; state.player.nextDx = dx; state.player.nextDy = dy; };
+    document.getElementById('btn-up').onclick = () => setDir(0, -1); document.getElementById('btn-down').onclick = () => setDir(0, 1); document.getElementById('btn-left').onclick = () => setDir(-1, 0); document.getElementById('btn-right').onclick = () => setDir(1, 0);
+    window.addEventListener('keydown', e => { const k = e.key.toLowerCase(); if(k==='w'||k==='arrowup') setDir(0,-1); if(k==='s'||k==='arrowdown') setDir(0,1); if(k==='a'||k==='arrowleft') setDir(-1,0); if(k==='d'||k==='arrowright') setDir(1,0); if(e.code==='Space') { state.isDashing = true; document.getElementById('dash-effect').classList.add('active'); document.getElementById('battle-dash-text').classList.remove('hidden'); } });
     window.addEventListener('keyup', e => { if(e.code==='Space') { state.isDashing = false; document.getElementById('dash-effect')?.classList.remove('active'); document.getElementById('battle-dash-text')?.classList.add('hidden'); } });
-
-    document.getElementById('mobile-dash-btn').addEventListener('touchstart', e => { e.preventDefault(); state.isDashing = true; document.getElementById('dash-effect')?.classList.add('active'); });
-    document.getElementById('mobile-dash-btn').addEventListener('touchend', e => { e.preventDefault(); state.isDashing = false; document.getElementById('dash-effect')?.classList.remove('active'); });
-
-    function listenCommunity() {
-        onSnapshot(query(collection(state.db, 'artifacts', appId, 'public', 'data', 'community')), s => {
-            const container = document.getElementById('comm-posts');
-            container.innerHTML = s.docs.map(d => {
-                const p = d.data();
-                return `<div class="bg-slate-800 p-4 rounded-xl border border-slate-700 shadow-sm animate-fade-in"><b>${p.nickname || "익명"}</b>: ${p.content}</div>`;
-            }).join('');
-        });
-    }
-
-    document.getElementById('btn-comm-post').onclick = async () => {
-        const i = document.getElementById('comm-input'); if(!i.value.trim() || !state.user) return;
-        await addDoc(collection(state.db, 'artifacts', appId, 'public', 'data', 'community'), { content: i.value, nickname: state.userData.nickname || "익명", timestamp: serverTimestamp() });
-        i.value = '';
-    };
-
     document.getElementById('btn-start-single').onclick = () => initGame('single');
     initFirebase();
 </script>
+</body>
+</html>
 </body>
 </html>
